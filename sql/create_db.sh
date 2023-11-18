@@ -9,6 +9,10 @@ if [ ! -f "$SQL_FILE" ]; then
     exit 1
 fi
 
+# tables
 sqlite3 $DB_FILE < $SQL_FILE
+
+# views
+sqlite3 $DB_FILE < views.sql
 
 echo "Database created and tables added successfully."

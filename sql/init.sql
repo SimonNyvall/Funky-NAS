@@ -70,6 +70,7 @@ BEGIN
   RETURN QUERY SELECT f.id, f.name FROM files f
                WHERE f.created_at BETWEEN start_date AND end_date;
 END;
+$$ LANGUAGE plpgsql;
 
 
 -- Create stored procedures
@@ -79,6 +80,7 @@ BEGIN
   INSERT INTO files (name, location, created_at, updated_at, is_favorite, comment_id)
   VALUES (name, location, created_at, updated_at, is_favorite, comment_id);
 END;
+$$ LANGUAGE plpgsql;
 
 
 CREATE PROCEDURE add_comment(text TEXT)
@@ -87,6 +89,7 @@ BEGIN
   INSERT INTO comments (text)
   VALUES (text);
 END;
+$$ LANGUAGE plpgsql;
 
 
 CREATE PROCEDURE add_tag(name TEXT)
@@ -95,6 +98,7 @@ BEGIN
   INSERT INTO tags (name)
   VALUES (name);
 END;
+$$ LANGUAGE plpgsql;
 
 
 CREATE PROCEDURE add_filetag(file_id INTEGER, tag_id INTEGER)
@@ -103,6 +107,7 @@ BEGIN
   INSERT INTO filetags (file_id, tag_id)
   VALUES (file_id, tag_id);
 END;
+$$ LANGUAGE plpgsql;
 
 
 CREATE PROCEDURE update_file(id INTEGER, name TEXT, location TEXT, created_at TIMESTAMP, updated_at TIMESTAMP, is_favorite BOOLEAN, comment_id INTEGER)
@@ -112,6 +117,7 @@ BEGIN
   SET name = name, location = location, created_at = created_at, updated_at = updated_at, is_favorite = is_favorite, comment_id = comment_id
   WHERE id = id;
 END;
+$$ LANGUAGE plpgsql;
 
 
 CREATE PROCEDURE update_comment(id INTEGER, text TEXT)
@@ -121,6 +127,7 @@ BEGIN
   SET text = text
   WHERE id = id;
 END;
+$$ LANGUAGE plpgsql;
 
 
 CREATE PROCEDURE update_tag(id INTEGER, name TEXT)
@@ -130,6 +137,7 @@ BEGIN
   SET name = name
   WHERE id = id;
 END;
+$$ LANGUAGE plpgsql;
 
 
 CREATE PROCEDURE update_filetag(file_id INTEGER, tag_id INTEGER)
@@ -139,6 +147,7 @@ BEGIN
   SET file_id = file_id, tag_id = tag_id
   WHERE file_id = file_id AND tag_id = tag_id;
 END;
+$$ LANGUAGE plpgsql;
 
 
 CREATE PROCEDURE delete_file(id INTEGER)
@@ -147,6 +156,7 @@ BEGIN
   DELETE FROM files
   WHERE id = id;
 END;
+$$ LANGUAGE plpgsql;
 
 
 CREATE PROCEDURE delete_comment(id INTEGER)
@@ -155,6 +165,7 @@ BEGIN
   DELETE FROM comments
   WHERE id = id;
 END;
+$$ LANGUAGE plpgsql;
 
 
 CREATE PROCEDURE delete_tag(id INTEGER)
@@ -163,6 +174,7 @@ BEGIN
   DELETE FROM tags
   WHERE id = id;
 END;
+$$ LANGUAGE plpgsql;
 
 
 CREATE PROCEDURE delete_filetag(file_id INTEGER, tag_id INTEGER)
@@ -171,20 +183,6 @@ BEGIN
   DELETE FROM filetags
   WHERE file_id = file_id AND tag_id = tag_id;
 END;
+$$ LANGUAGE plpgsql;
 
-
--- Create triggers
-CREATE TRIGGER update_file_timestamp
-BEFORE UPDATE ON files 
-FOR EACH ROW EXECUTE PROCEDURE update_timestamp();
-
-
-CREATE TRIGGER update_comment_timestamp
-BEFORE UPDATE ON comments
-FOR EACH ROW EXECUTE PROCEDURE update_timestamp();
-
-
-CREATE TRIGGER update_tag_timestamp
-BEFORE UPDATE ON tags
-FOR EACH ROW EXECUTE PROCEDURE update_timestamp();
 
